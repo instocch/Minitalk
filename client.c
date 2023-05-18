@@ -71,7 +71,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 	{
-		ft_printf("Usage: %s PID STRING\n", argv[0]);
+		write(1, "Usage: PID STRING", 19);
 		exit(EXIT_FAILURE);
 	}
 	signal(SIGUSR1, wake_up);
@@ -79,4 +79,5 @@ int	main(int argc, char **argv)
 	len = (unsigned int)ft_strlen(argv[2]);
 	send_str_len(len, server_pid);
 	send_str(argv[2], server_pid);
+    write(1, "Receive message", 15);
 }

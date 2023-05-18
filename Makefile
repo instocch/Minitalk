@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = server client
+NAME = dependencies server client
 SRCS = server.c client.c
 OBJ = $(SRCS:.c=.o)
 
@@ -24,14 +24,16 @@ all: $(NAME)
 
 bonus: $(NAME)
 
-server: server.o 
-	make -C $(LIBFT) 
-	make -C $(PRINTF)
-	$(CC) -o $@ $< ./libft/libft.a -Llibft -lft ./printf/libftprintf.a -Lprintf -lft
-	
+dependencies:
+	make all -C $(LIBFT)
+	make all -C $(PRINTF)
 
-client: client.o
-	$(CC) -o $@ $< ./libft/libft.a Llibft -lft ./printf/libftprintf.a -Lprintf -lft
+server: server.o dependencies
+	$(CC) -L$(LIBFT) -L$(PRINTF) -o $@ $< -lft -lftprintf
+
+
+client: client.o dependencies
+	$(CC) -L$(LIBFT) -L$(PRINTF) -o $@ $< -lft -lftprintf
 
 %.o: %.c
 	$(CC) -c $(FLAGS) $?
@@ -41,7 +43,7 @@ clean:
 	rm -f $(OBJ)
 	make clean -C $(LIBFT)
 	make clean -C $(PRINTF)
-	
+
 fclean: clean
 	make fclean -C $(LIBFT)
 	make fclean -C $(PRINTF)
